@@ -40,6 +40,7 @@ class FormatChecker{
    * @param filename string, name of file to open
    * @throws FileNotFoundException if given file is now found
    * @throws NumberFormatExcpetion if value can't be converted to double
+   * @throws Exception, when there are more rows than the specification says
    */
     public static void openFile(String filename){
         try (Scanner scnr = new Scanner(new File(filename));){
@@ -63,18 +64,20 @@ class FormatChecker{
             if ((rowCount - 1) == formatingNums[0] && isRowValid) {
                 System.out.println("VALID");
             } else{
-                System.out.println("INVALID");
+                // System.out.println("INVALID");
                 if (rowCount != formatingNums[0]) {
-                    System.out.println("Row count is " + (rowCount - 1) + " when it should be " + (int)formatingNums[0]);
+                    throw new Exception("Row count is " + (rowCount - 1) + " when it should be " + (int)formatingNums[0]);
                 }
-            }
+                }
         } catch (FileNotFoundException e) {
-            System.out.println("File was not found: " + e.toString());
-        } catch (NumberFormatException e){
+            System.out.println(e.toString());
             System.out.println("INVALID");
+        } catch (NumberFormatException e){
             System.out.println(e.toString());
-        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("INVALID");
+        } catch (Exception e){
             System.out.println(e.toString());
+            System.out.println("INVALID");
         }
     }
 
@@ -86,13 +89,15 @@ class FormatChecker{
    * @param row string, single row of a given file
    * @param formatDimensions empty array, will carry the dimensions for the matrix
    * @return array, returns formatDimensions with values inputted
+   * @throws Exception, when the formatting specifications length is larger than 2
    */
-    public static double[] ReadFormattingDimensions(String row, double[] formatDimensions){
+    public static double[] ReadFormattingDimensions(String row, double[] formatDimensions) throws Exception{
         // Converting String to array
         String[] str = row.split(" ");
         // IF FIRST ROW HAS MORE THAN TWO DIGITS
         if (str.length > 2) {
-            System.out.println("INVALID");
+            throw new Exception("Formatting Specificiations is to long");
+            // System.out.println("INVALID");
         }
         // LOOPS through string that was converted to array and converts each element to integers and adds to formatDimensions array
         for (int i = 0; i < str.length; i++) {
@@ -111,8 +116,9 @@ class FormatChecker{
    * @param row string, single row of a given file
    * @param colCount number of columns a file should have
    * @return boolean, true if row was valid based on logic else false
+   * @throws Exception, when the loop finds a row that has more columns than it should have
    */
-    public static boolean rowCounter(String row, double colCount){
+    public static boolean rowCounter(String row, double colCount) throws Exception{
         boolean isRowValid = false;
         String[] str = row.split(" ");
         // Make sure I can convert the element of each arry to a double
@@ -122,7 +128,7 @@ class FormatChecker{
         if ((double)str.length == colCount) {
             isRowValid = true;
         } else {
-            System.out.println("The following row:  " + row + ", has " + str.length + " columns, when it should have " + (int)colCount);
+            throw new Exception("The following row:  " + row + ", has " + str.length + " columns, when it should have " + (int)colCount);
         }
         return isRowValid;
     }
