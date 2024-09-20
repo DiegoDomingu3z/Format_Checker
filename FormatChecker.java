@@ -73,6 +73,8 @@ class FormatChecker{
         } catch (NumberFormatException e){
             System.out.println("INVALID");
             System.out.println(e.toString());
+        } catch (ArrayIndexOutOfBoundsException e){
+            System.out.println(e.toString());
         }
     }
 
@@ -90,14 +92,14 @@ class FormatChecker{
         String[] str = row.split(" ");
         // IF FIRST ROW HAS MORE THAN TWO DIGITS
         if (str.length > 2) {
-            System.out.println("INVALID FORMATING SPECIFICATIONS");
+            System.out.println("INVALID");
         }
         // LOOPS through string that was converted to array and converts each element to integers and adds to formatDimensions array
         for (int i = 0; i < str.length; i++) {
             // Convert to Integer and remove any white space from the string if there is some
             // double doubleNum = str[i].replace(oldChar, newChar)
-            double num = Double.parseDouble(str[i].replaceAll("\\s", ""));
-            formatDimensions[i] = (double)num;
+            int num = Integer.parseInt(str[i].replaceAll("\\s", ""));
+            formatDimensions[i] = num;
         }
         return formatDimensions;
     }
